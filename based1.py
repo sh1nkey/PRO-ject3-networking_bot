@@ -180,7 +180,7 @@ class Napominalka():
 
 
 
-def comparing():
+def rewriting_data_timer_func():
     list_papok = os.listdir(reminder_txt_dir)
     list_of_users = []
     list_of_people = []
@@ -260,18 +260,18 @@ vk_session = vk_api.VkApi(token=vk_token)
 session_api = vk_session.get_api()
 longpool = VkLongPoll(vk_session)
 
-def checking():
-    id_list, sending_list = comparing()
-    print('id list:', id_list, 'sending list:', sending_list)
+def cheking_sending_timer_func():
+    users_to_be_sent_list, sending_people_list = rewriting_data_timer_func()
+    print('id list:', users_to_be_sent_list, 'sending list:', sending_people_list)
 
     sd = ''
     try:
-        if len(sending_list) > 0:
-            for _ in sending_list:
+        if len(sending_people_list) > 0:
+            for _ in sending_people_list:
                 if len(_) == 0:
                     continue
-                id = id_list[sending_list.index(_)]
-                print('slindex:', sending_list.index(_))
+                id = users_to_be_sent_list[sending_people_list.index(_)]
+                print('slindex:', sending_people_list.index(_))
                 for _1 in _:
                     print('_::::')
                     sd = sd + '\n' + "Не забудь написать человеку [{}]!".format(_1)
@@ -280,7 +280,7 @@ def checking():
     except vk_api.exceptions.ApiError:
         pass
 
-checking()
+cheking_sending_timer_func()
 
 '''
 функция удаления пользователей из таблицы будет доступна в будущих обновлениях

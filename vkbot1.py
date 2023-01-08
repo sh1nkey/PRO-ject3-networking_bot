@@ -13,7 +13,7 @@
 
 import vk_api,  pathlib, os
 from vk_api.longpoll import VkLongPoll, VkEventType
-from based1 import create_table, show_table, change_data_table, comparing, create_people, create_dft, Napominalka, \
+from based1 import create_table, show_table, change_data_table, create_people, create_dft, Napominalka, \
     create_timers
 from config1 import vk_token, reminder_txt_dir
 
