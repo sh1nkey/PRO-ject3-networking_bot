@@ -1,8 +1,8 @@
 
-host = "localhost" #это все данные для базы данных MySQL
-user = 'root'
-password = 'ltnb2324'
-db_name = 'project3'
+host = "" #это все данные для базы данных MySQL
+user = ''
+password = ''
+db_name = ''
 
 vk_token = '' #вставьте свой токен группы вк
 reminder_txt_dir = '' #вставьте сюда директорию, в котором будет сохраняться текстовый файл, при помощи которого программа

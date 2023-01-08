@@ -13,8 +13,7 @@
 
 import vk_api,  pathlib, os
 from vk_api.longpoll import VkLongPoll, VkEventType
-from based1 import create_table, show_table, change_data_table, create_people, create_dft, Napominalka, \
-    create_timers
+from based1 import create_people, change_data_table, show_table, create_table, create_timers, create_dft, Napominalka
 from config1 import vk_token, reminder_txt_dir
 
 vk_session = vk_api.VkApi(token=vk_token)
@@ -36,7 +35,7 @@ running = 0
 for event in longpool.listen():
     if event.type == VkEventType.MESSAGE_NEW:
         if event.to_me:
-            msg= event.text.lower()
+            msg = event.text.lower()
             id = event.user_id
             if msg == "привет":
                 sending_message_func(id, "Давай сразу к делу. Инструкция:\n (Команды писать без квадратных скобочек)\n\n-создать "

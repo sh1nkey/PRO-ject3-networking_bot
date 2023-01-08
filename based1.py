@@ -2,7 +2,6 @@ import pathlib
 from pymysql import cursors
 from config1 import user, host, password, db_name, reminder_txt_dir, vk_token
 import random
-from vkbot1 import sending_message_func
 from vk_api.longpoll import VkLongPoll
 import vk_api
 import copy
@@ -48,7 +47,6 @@ def create_people(table_name, ima, data, gorod, prof, uvl, srok):
     except Exception as ex:
         print("Connection refused...")
         print(ex)
-
 
 
 
@@ -260,6 +258,8 @@ vk_session = vk_api.VkApi(token=vk_token)
 session_api = vk_session.get_api()
 longpool = VkLongPoll(vk_session)
 
+def sending_message_func(id, text): #
+    vk_session.method("messages.send", {"user_id":id, "message":text, "random_id": 0})
 def cheking_sending_timer_func():
     users_to_be_sent_list, sending_people_list = rewriting_data_timer_func()
     print('id list:', users_to_be_sent_list, 'sending list:', sending_people_list)
