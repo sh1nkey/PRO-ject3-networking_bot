@@ -11,7 +11,7 @@ import re
 import os
 import pymysql
 
-def rand_name(length):
+def random_x_digit_number_generate(length):
     letters = string.ascii_letters
     rand_name = ''.join(random.choice(letters) for i in range(length))
     return str(rand_name)
@@ -37,10 +37,10 @@ except Exception as ex:
 def create_people(table_name, ima, data, gorod, prof, uvl, srok):
     try:
         with connection.cursor() as cursor:
-            crete_ppl = 'INSERT INTO project3.%s (Имя, Дата_рождения, Город, Специализация, Увлечения, Срок_напоминания) ' \
+            create_ppl = 'INSERT INTO project3.%s (Имя, Дата_рождения, Город, Специализация, Увлечения, Срок_напоминания) ' \
                         "VALUES ('%s', '%s', '%s', '%s', '%s', %s);"
 
-            cursor.execute(crete_ppl % (table_name, ima, data, gorod, prof, uvl, srok,))
+            cursor.execute(create_ppl % (table_name, ima, data, gorod, prof, uvl, srok,))
             connection.commit()
             print('created sucsefuly')
 
@@ -50,29 +50,9 @@ def create_people(table_name, ima, data, gorod, prof, uvl, srok):
         print(ex)
 
 
-'''
-функция удаления пользователей из таблицы будет доступна в будущих обновлениях
-'''
-# def delete_people(tname, del_name):
-#     try:
-#         with connection.cursor() as cursor:
-#             del_name_int = int(del_name)
-#             t = [tname, str(del_name_int), tname, tname, tname, ]
-#
-#
-#             cursor.execute('DELETE FROM project3.symbol=? WHERE id = symbol=?; ALTER TABLE project3.symbol=? DROP id; ' \
-#                       'ALTER TABLE project3.symbol=? ADD id int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST; ' \
-#                       'ALTER TABLE project3.symbol=? AUTO_INCREMENT = 1; set @n=0; update t1 set id=(@n:=@n+1);', [t])
-#             connection.commit()
-#             print('dltd sucsefuly')
 
 
-    # except Exception as ex:
-    #     print("Connection refused...")
-    #     print(ex)
-
-
-def change_table(table_name, what_change, idshnik, to_what):
+def change_data_table(table_name, what_change, idshnik, to_what):
     try:
         with connection.cursor() as cursor:
             identify_change = "UPDATE project3.%s" \
@@ -100,7 +80,6 @@ def show_table(msg):
 
             result = cursor.fetchall()
 
-
             n = []
             for row in result:
                 n.append(row)
@@ -113,7 +92,7 @@ def show_table(msg):
         print(ex)
 
 
-def create_table():
+def create_table(): #функция для создания таблицы
     try:
         with connection.cursor() as cursor:
 
@@ -121,7 +100,7 @@ def create_table():
                             " DATE, " \
                             " Город  varchar(50), Специализация varchar(50), Увлечения varchar (50), Срок_напоминания " \
                             " SMALLINT)"
-            x = rand_name(8)
+            x = random_x_digit_number_generate(8)
             cursor.execute(create_ttable % x)
             print('table cret succful')
             return x
@@ -146,13 +125,12 @@ def create_dft(tablename):
     try:
         with connection.cursor() as cursor:
             create_listtable = "SELECT Имя FROM project3.%s "
-            x = tablename
-            cursor.execute(create_listtable % x)
+            cursor.execute(create_listtable % tablename)
             print('tablelist cret succfukk')
             my_result1 = cursor.fetchall()
 
             f = {}
-            for _ in range(0, len(my_result1)):
+            for _ in range(0, len(my_result1)): #создается словарь с именами людей и нулями для произведение отсчета
                 l = my_result1[_]['Имя']
                 f[l] = 0
 
@@ -173,7 +151,7 @@ def create_dft(tablename):
         print("Connection refused...")
         print(ex)
 
-def rand_Napominame(self):
+def generate_name_for_timer_txt(self):
     n_new = 'Napominalka-{}'.format(self)
     return n_new
 
@@ -191,13 +169,12 @@ class Napominalka():
 
 
     def append_totxt(self):
-        c_name = rand_Napominame(self.vk_id)
+        c_name = generate_name_for_timer_txt(self.vk_id)
 
         pas = pathlib.Path(reminder_txt_dir +'/{}.txt'.format(c_name))
 
         w = open(pas, 'w')
-        adding = str(self.nuzn_list) + str(self.imya_name) + str(self.imya_srok)
-        w.write(adding)
+        w.write(str(self.nuzn_list) + str(self.imya_name) + str(self.imya_srok))
         w.close()
 
 
@@ -305,7 +282,26 @@ def checking():
 
 checking()
 
+'''
+функция удаления пользователей из таблицы будет доступна в будущих обновлениях
+'''
+# def delete_people(tname, del_name):
+#     try:
+#         with connection.cursor() as cursor:
+#             del_name_int = int(del_name)
+#             t = [tname, str(del_name_int), tname, tname, tname, ]
+#
+#
+#             cursor.execute('DELETE FROM project3.symbol=? WHERE id = symbol=?; ALTER TABLE project3.symbol=? DROP id; ' \
+#                       'ALTER TABLE project3.symbol=? ADD id int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST; ' \
+#                       'ALTER TABLE project3.symbol=? AUTO_INCREMENT = 1; set @n=0; update t1 set id=(@n:=@n+1);', [t])
+#             connection.commit()
+#             print('dltd sucsefuly')
 
+
+    # except Exception as ex:
+    #     print("Connection refused...")
+    #     print(ex)
 
 
 

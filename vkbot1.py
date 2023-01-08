@@ -13,10 +13,9 @@
 
 import vk_api,  pathlib, os
 from vk_api.longpoll import VkLongPoll, VkEventType
-from based1 import create_table, show_table, change_table, comparing, create_people, create_dft, Napominalka, \
+from based1 import create_table, show_table, change_data_table, comparing, create_people, create_dft, Napominalka, \
     create_timers
-from config1 import vk_token
-
+from config1 import vk_token, reminder_txt_dir
 
 vk_session = vk_api.VkApi(token=vk_token)
 session_api = vk_session.get_api()
@@ -39,7 +38,6 @@ for event in longpool.listen():
         if event.to_me:
             msg= event.text.lower()
             id = event.user_id
-            print(id)
             if msg == "привет":
                 sending_message_func(id, "Давай сразу к делу. Инструкция:\n (Команды писать без квадратных скобочек)\n\n-создать "
                                       "таблицу, "
@@ -82,11 +80,11 @@ for event in longpool.listen():
 
             if msg[0:2] == "на":
                 to_what = msg[3:]
-                change_table(change_list[0], change_list[1], change_list[2], to_what)
+                change_data_table(change_list[0], change_list[1], change_list[2], to_what)
                 sending_message_func(id, "Изменено успешно! ")
                 change_list.clear()
 
-                checking_path = pathlib.Path('C:/Users/User/Desktop/testing/{}.txt'.format('Napominalka-' + str(id)))
+                checking_path = pathlib.Path(reminder_txt_dir + '/{}.txt'.format('Napominalka-' + str(id)))
                 if os.path.exists(checking_path):
                     running = 1
 
@@ -105,7 +103,7 @@ for event in longpool.listen():
             #     sending_message_func(id, "человек удален ")
 
 
-            if msg[0] == 'о' or running == 1:  # создать и запустить отсчет
+            if msg[0] == 'о' or running == 1: # создать и запустить отсчет, отсчет обновиться автоматом, если таблицу изменить
                 tname = msg[7:]
                 if running == 1:
                     tname = tne
@@ -121,7 +119,7 @@ for event in longpool.listen():
 
 
 
-            if msg[0] == 'с':
+            if msg[0] == 'с': # с - создать, добавляет человека в таблицу
                 probel_list = []
                 d = -1
                 for i in msg:
