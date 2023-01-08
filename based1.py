@@ -1,7 +1,8 @@
 import pathlib
 from pymysql import cursors
-from config import user, host, password, db_name
-import random, time
+from config1 import user, host, password, db_name, reminder_txt_dir, vk_token
+import random
+from vkbot1 import sending_message_func
 from vk_api.longpoll import VkLongPoll
 import vk_api
 import copy
@@ -49,30 +50,26 @@ def create_people(table_name, ima, data, gorod, prof, uvl, srok):
         print(ex)
 
 
-def delete_people(tname, del_name):
-    try:
-        with connection.cursor() as cursor:
-            del_name_int = int(del_name)
-            t = [tname, str(del_name_int), tname, tname, tname, ]
-
-            # del_ppl = 'DELETE FROM project3.symbol=? WHERE id = symbol=?; ALTER TABLE project3.symbol=? DROP id; ' \
-            #           'ALTER TABLE project3.symbol=? ADD id int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST; ' \
-            #           'ALTER TABLE project3.symbol=? AUTO_INCREMENT = 1; set @n=0; update t1 set id=(@n:=@n+1);'
-            # cursor.execute(del_ppl, [t])
-            #
-            # connection.commit()
-            # print('dltd sucsefuly')
-
-            cursor.execute('DELETE FROM project3.symbol=? WHERE id = symbol=?; ALTER TABLE project3.symbol=? DROP id; ' \
-                      'ALTER TABLE project3.symbol=? ADD id int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST; ' \
-                      'ALTER TABLE project3.symbol=? AUTO_INCREMENT = 1; set @n=0; update t1 set id=(@n:=@n+1);', [t])
-            connection.commit()
-            print('dltd sucsefuly')
+'''
+функция удаления пользователей из таблицы будет доступна в будущих обновлениях
+'''
+# def delete_people(tname, del_name):
+#     try:
+#         with connection.cursor() as cursor:
+#             del_name_int = int(del_name)
+#             t = [tname, str(del_name_int), tname, tname, tname, ]
+#
+#
+#             cursor.execute('DELETE FROM project3.symbol=? WHERE id = symbol=?; ALTER TABLE project3.symbol=? DROP id; ' \
+#                       'ALTER TABLE project3.symbol=? ADD id int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST; ' \
+#                       'ALTER TABLE project3.symbol=? AUTO_INCREMENT = 1; set @n=0; update t1 set id=(@n:=@n+1);', [t])
+#             connection.commit()
+#             print('dltd sucsefuly')
 
 
-    except Exception as ex:
-        print("Connection refused...")
-        print(ex)
+    # except Exception as ex:
+    #     print("Connection refused...")
+    #     print(ex)
 
 
 def change_table(table_name, what_change, idshnik, to_what):
@@ -103,7 +100,7 @@ def show_table(msg):
 
             result = cursor.fetchall()
 
-            # loop through the rows
+
             n = []
             for row in result:
                 n.append(row)
@@ -158,15 +155,12 @@ def create_dft(tablename):
             for _ in range(0, len(my_result1)):
                 l = my_result1[_]['Имя']
                 f[l] = 0
-            print(f)
-            print(len(f))
-            print(my_result1)
+
 
             vals = "SELECT Срок_напоминания FROM project3.%s "
             cursor.execute(vals % tablename)
             print('tablist updt succfully')
             my_result = cursor.fetchall()
-            print(my_result)
 
             for _ in range(0, len(f)):
                 nd = my_result1[_]['Имя']
@@ -199,7 +193,7 @@ class Napominalka():
     def append_totxt(self):
         c_name = rand_Napominame(self.vk_id)
 
-        pas = pathlib.Path('C:/Users/User/Desktop/testing/{}.txt'.format(c_name))
+        pas = pathlib.Path(reminder_txt_dir +'/{}.txt'.format(c_name))
 
         w = open(pas, 'w')
         adding = str(self.nuzn_list) + str(self.imya_name) + str(self.imya_srok)
@@ -210,11 +204,11 @@ class Napominalka():
 
 
 def comparing():
-    list_papok = os.listdir('C:/Users/User/Desktop/testing')
+    list_papok = os.listdir(reminder_txt_dir)
     list_of_users = []
     list_of_people = []
     for i in list_papok:
-        r = open('C:/Users/User/Desktop/testing/{}'.format(i), 'r')
+        r = open(reminder_txt_dir + '/{}'.format(i), 'r')
         x = r.read()
         r.close()
         listofdots = []
@@ -234,7 +228,6 @@ def comparing():
             list_of_names1.append(adding)
 
         s = [int(s) for s in re.findall(r'-?\d+\.?\d*', x)]
-        s1 = copy.deepcopy(s)
         for _ in s:
             if _ == 4938:
                 s.remove(_)
@@ -269,7 +262,7 @@ def comparing():
 
         rewrite = str(rewrite_count) + x[str_beg:]
 
-        w = open('C:/Users/User/Desktop/testing/{}'.format(i), 'w')
+        w = open(reminder_txt_dir + '/{}'.format(i), 'w')
         w.write(rewrite)
         w.close()
 
@@ -286,12 +279,9 @@ def comparing():
 
 
 
-vk_session = vk_api.VkApi(token='vk1.a.fN2xUHC6V5pciRzSeTYo67DUTqLNeaHAzuhafpgnkgBqWb-O858OEWBCKRAN_CD-Osu67MATaJvcgNa_uB8KWvWmQd1JfqlqA0iptV62yl-X_vt4KiVmacwEZIq_hm7mwgkLY_FUFMKEkrM0ISAwycPkhuONRP8vU0BzAH1qrNONPhvkrriO-xq-XNTphb2V')
+vk_session = vk_api.VkApi(token=vk_token)
 session_api = vk_session.get_api()
 longpool = VkLongPoll(vk_session)
-
-def send_some_message(id,text):
-    vk_session.method("messages.send", {"user_id":id, "message":text, "random_id": 0})
 
 def checking():
     id_list, sending_list = comparing()
@@ -308,7 +298,7 @@ def checking():
                 for _1 in _:
                     print('_::::')
                     sd = sd + '\n' + "Не забудь написать человеку [{}]!".format(_1)
-                send_some_message(id, sd)
+                sending_message_func(id, sd)
                 sd = ''
     except vk_api.exceptions.ApiError:
         pass
