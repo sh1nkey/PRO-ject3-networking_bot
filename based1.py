@@ -150,8 +150,8 @@ def create_dft(tablename):
         print(ex)
 
 def generate_name_for_timer_txt(self):
-    n_new = 'Napominalka-{}'.format(self)
-    return n_new
+    name_new = 'Napominalka-{}'.format(self)
+    return name_new
 
 
 

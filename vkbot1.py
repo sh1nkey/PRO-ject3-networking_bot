@@ -87,19 +87,6 @@ for event in longpool.listen():
                 if os.path.exists(checking_path):
                     running = 1
 
-            '''
-            функция на доработке
-            '''
-            # if msg[0] == 'у':
-            #     tname = msg[8:16]
-            #     if msg[-2] == ' ':
-            #         del_name = int(msg[-1])
-            #     else:
-            #         del_name = int(msg[-2] + '' + msg[-1])
-            #     print(type(del_name))
-            #     print(del_name)
-            #     delete_people(tname, del_name)
-            #     sending_message_func(id, "человек удален ")
 
 
             if msg[0] == 'о' or running == 1: # создать и запустить отсчет, отсчет обновиться автоматом, если таблицу изменить
@@ -141,8 +128,21 @@ for event in longpool.listen():
                 print('dannie:', table_name, yima, data, gorod, prof, uvl, srok)
                 create_people(table_name, yima, data, gorod, prof, uvl, srok)
                 sending_message_func(id, "Готово! ")
-
-
+            '''
+            функция
+            на
+            доработке
+            '''
+            # if msg[0] == 'у':
+            #     tname = msg[8:16]
+            #     if msg[-2] == ' ':
+            #         del_name = int(msg[-1])
+            #     else:
+            #         del_name = int(msg[-2] + '' + msg[-1])
+            #     print(type(del_name))
+            #     print(del_name)
+            #     delete_people(tname, del_name)
+            #     sending_message_func(id, "человек удален ")
 
 
 
