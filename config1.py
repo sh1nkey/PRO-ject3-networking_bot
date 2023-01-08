@@ -1,5 +1,5 @@
 
-host = "" #это все данные для базы данных MySQL
+host = '' #это все данные для базы данных MySQL
 user = ''
 password = ''
 db_name = ''
