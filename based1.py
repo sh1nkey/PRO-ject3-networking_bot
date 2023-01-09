@@ -1,3 +1,12 @@
+# -----------------------------------------------------------
+# program that contains all functions
+#
+# 2022 Alexey Kudelko, Moscow, Russia
+#
+# email: flexivanov237@gmail.com
+# -----------------------------------------------------------
+
+
 import pathlib
 from pymysql import cursors
 from config1 import user, host, password, db_name, reminder_txt_dir, vk_token
@@ -280,7 +289,10 @@ def cheking_sending_timer_func():
     except vk_api.exceptions.ApiError:
         pass
 
-cheking_sending_timer_func()
+if __name__ == "__main__":
+    cheking_sending_timer_func()
+
+
 
 '''
 функция удаления пользователей из таблицы будет доступна в будущих обновлениях
@@ -302,7 +314,6 @@ cheking_sending_timer_func()
     # except Exception as ex:
     #     print("Connection refused...")
     #     print(ex)
-
 
 
 

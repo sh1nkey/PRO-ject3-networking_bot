@@ -7,14 +7,11 @@
 # -----------------------------------------------------------
 
 
-
-
-
-
 import vk_api,  pathlib, os
 from vk_api.longpoll import VkLongPoll, VkEventType
 from based1 import create_people, change_data_table, show_table, create_table, create_timers, create_dft, Napominalka
 from config1 import vk_token, reminder_txt_dir
+
 
 vk_session = vk_api.VkApi(token=vk_token)
 session_api = vk_session.get_api()
