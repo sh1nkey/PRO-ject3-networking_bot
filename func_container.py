@@ -9,7 +9,7 @@
 
 import pathlib
 from pymysql import cursors
-from config1 import user, host, password, db_name, reminder_txt_dir, vk_token
+from config import user, host, password, db_name, reminder_txt_dir, vk_token
 import random
 from vk_api.longpoll import VkLongPoll
 import vk_api
