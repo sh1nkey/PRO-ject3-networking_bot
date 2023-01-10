@@ -44,9 +44,9 @@ for event in longpool.listen():
 'Например:[изменить qwerTyui Имя 2]\n\nЧтобы поменять данные в этой ячейке пишем: [на то_на_что_меняем]. Например: [на Андрей]' \
 '\n\n-чтобы заставить программу напоминать вам о том, чтобы время от времени писать определенным людям, то пишем: [отсчет "
                                       "название_таблички]. Например: [отсчет qwertyUi]\nНе беспокойтесь, если вы обновите свою таблицу, то и список тоже обновится :) ")
-            if msg == "!создатьтаблицу":
+            elif msg == "!создатьтаблицу":
                 sending_message_func(id, "таблица готова!\n ее имя:" + create_table())
-            if len(msg) == 8:
+            elif len(msg) == 8:
                 sending_message_func(id, "Вот содержание таблицы {}\n:".format(msg))
                 full = list(show_table(msg))
                 sd = ''
@@ -58,7 +58,7 @@ for event in longpool.listen():
                 sending_message_func(id, sd)
 
 
-            if msg[0] == 'и':
+            elif msg[0] == 'и':
                 table_name = msg[9:17]
                 tne = msg[9:17]
                 change_list.append(table_name)
@@ -74,7 +74,7 @@ for event in longpool.listen():
                 if len(change_list) > 3:
                     change_list.clear()
 
-            if msg[0:2] == "на":
+            elif msg[0:2] == "на":
                 to_what = msg[3:]
                 change_data_table(change_list[0], change_list[1], change_list[2], to_what)
                 sending_message_func(id, "Изменено успешно! ")
@@ -86,7 +86,7 @@ for event in longpool.listen():
 
 
 
-            if msg[0] == 'о' or running == 1: # создать и запустить отсчет, отсчет обновиться автоматом, если таблицу изменить
+            elif msg[0] == 'о' or running == 1: # создать и запустить отсчет, отсчет обновиться автоматом, если таблицу изменить
                 tname = msg[7:]
                 if running == 1:
                     tname = tne
@@ -102,7 +102,7 @@ for event in longpool.listen():
 
 
 
-            if msg[0] == 'с': # с - создать, добавляет человека в таблицу
+            elif msg[0] == 'с': # с - создать, добавляет человека в таблицу
                 probel_list = []
                 d = -1
                 for i in msg:
