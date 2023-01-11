@@ -118,22 +118,21 @@ def create_table(): #функция для создания таблицы
         print(ex)
 
 
-def create_timers(imya_name, imya_srok):
-    nuzn_perm = copy.deepcopy(imya_srok)
+def create_timers(imya_name, name_term): #манипуляция со словарями для дальнейшей работы с ними
+    nuzn_perm = copy.deepcopy(name_term)
     for _ in range(0, len(imya_name)):
         nam = imya_name[_]['Имя']
         nuzn_perm[nam] = 0
     print(nuzn_perm)
-    return [nuzn_perm, imya_srok,  imya_name]
+    return [nuzn_perm, name_term, imya_name]
 
 
 
-def create_dft(tablename):
+def create_dft(tablename): # манипуляция со словарями
     try:
         with connection.cursor() as cursor:
             create_listtable = "SELECT Имя FROM project3.%s "
             cursor.execute(create_listtable % tablename)
-            print('tablelist cret succfukk')
             my_result1 = cursor.fetchall()
 
             f = {}
@@ -144,14 +143,12 @@ def create_dft(tablename):
 
             vals = "SELECT Срок_напоминания FROM project3.%s "
             cursor.execute(vals % tablename)
-            print('tablist updt succfully')
             my_result = cursor.fetchall()
 
             for _ in range(0, len(f)):
                 nd = my_result1[_]['Имя']
                 f[nd] = my_result[_]['Срок_напоминания']
 
-            print(f)
             return [my_result1, f]
 
     except Exception as ex:
@@ -166,11 +163,11 @@ def generate_name_for_timer_txt(self):
 
 
 
-class Napominalka():
-    def __init__(self, nuzn_perm, imya_srok, imya_name, vk_id):
+class Reminder():
+    def __init__(self, nuzn_perm, name_term, imya_name, vk_id):
         self.vk_id = vk_id
         self.nuzn_list = nuzn_perm
-        self.imya_srok = imya_srok
+        self.imya_srok = name_term
         self.imya_name = imya_name
 
 
@@ -222,7 +219,6 @@ def rewriting_data_timer_func():
 
 
         sending_massive = []
-        print(s_ready, '\n', first_numlist)
         for _ in range (0, len(s_ready)):
 
             if first_numlist[_] < s_ready[_]:
@@ -269,7 +265,9 @@ longpool = VkLongPoll(vk_session)
 
 def sending_message_func(id, text): #
     vk_session.method("messages.send", {"user_id":id, "message":text, "random_id": 0})
-def cheking_sending_timer_func():
+
+def cheking_sending_timer_func(): #при запуске увеличивает числа в текстовом документе на 1, или обнуляет, если они достигли
+    # опр. значений
     users_to_be_sent_list, sending_people_list = rewriting_data_timer_func()
     print('id list:', users_to_be_sent_list, 'sending list:', sending_people_list)
 

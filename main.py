@@ -9,7 +9,7 @@
 
 import vk_api,  pathlib, os
 from vk_api.longpoll import VkLongPoll, VkEventType
-from func_container import create_people, change_data_table, show_table, create_table, create_timers, create_dft, Napominalka
+from func_container import create_people, change_data_table, show_table, create_table, create_timers, create_dft, Reminder
 from config import vk_token, reminder_txt_dir
 
 
@@ -95,8 +95,8 @@ while 1:
                         retu = create_dft(tname)
                         par_3 = create_timers(retu[0], retu[1])
                         print('PAR_3', par_3)
-                        nap = Napominalka(par_3[0], par_3[1], par_3[2], str(id))
-                        nap.append_totxt()
+                        rem = Reminder(par_3[0], par_3[1], par_3[2], str(id))
+                        rem.append_totxt()
                         if running == 0:
                             sending_message_func(id, 'список создан!')
                         elif running == 1:
@@ -105,27 +105,26 @@ while 1:
 
 
                     elif msg[0] == 'с': # с - создать, добавляет человека в таблицу
-                        probel_list = []
+                        space_list = []
                         d = -1
                         for i in msg:
                             d += 1
                             if i == " ":
-                                probel_list.append(d)
-                            if len(probel_list) == 7:
+                                space_list.append(d)
+                            if len(space_list) == 7:
                                 break
-                        print('probellist:', probel_list)
-                        table_name  = msg[probel_list[0]:probel_list[1]]
-                        yima = msg[probel_list[1]:probel_list[2]]
-                        data = msg[probel_list[2]:probel_list[3]]
-                        gorod = msg[probel_list[3]:probel_list[4]]
-                        prof = msg[probel_list[4]:probel_list[5]]
-                        uvl = msg[probel_list[5]:probel_list[6]]
+                        table_name  = msg[space_list[0]:space_list[1]]
+                        name_surname = msg[space_list[1]:space_list[2]]
+                        date = msg[space_list[2]:space_list[3]]
+                        place = msg[space_list[3]:space_list[4]]
+                        occupation = msg[space_list[4]:space_list[5]]
+                        hobby = msg[space_list[5]:space_list[6]]
                         if msg[-2] == ' ':
-                            srok = msg[-1]
+                            reminder_term = msg[-1]
                         else:
-                            srok = int(str(msg[-2] + '' + msg[-1]))
-                        print('dannie:', table_name, yima, data, gorod, prof, uvl, srok)
-                        create_people(table_name, yima, data, gorod, prof, uvl, srok)
+                            reminder_term = int(str(msg[-2] + '' + msg[-1]))
+                        print('dannie:', table_name, name_surname, date, place, occupation, hobby, reminder_term)
+                        create_people(table_name, name_surname, date, place, occupation, hobby, reminder_term)
                         sending_message_func(id, "Готово! ")
                     '''
                     функция
