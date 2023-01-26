@@ -8,6 +8,7 @@
 
 
 import pathlib
+import json
 from pymysql import cursors
 from config import user, host, password, db_name, reminder_txt_dir, vk_token
 import random
@@ -192,56 +193,24 @@ def rewriting_data_timer_func():
         r = open(reminder_txt_dir + '/{}'.format(i), 'r')
         x = r.read()
         r.close()
-        listofdots = []
-        for _ in range(0, len(x) + 1):
-            if x[_] == "'":
-                listofdots.append(_)
-            elif x[_] == "}":
-                break
-        list_of_names0 = []
-        list_of_names1 = []
-        for _ in range (0, len(listofdots)):
-            if _ % 2 == 0:
-                list_of_names0.append(x[listofdots[_]: listofdots[_ + 1]])
-
-        for _ in list_of_names0:
-            adding = _[1:]
-            list_of_names1.append(adding)
-
-        s = [int(s) for s in re.findall(r'-?\d+\.?\d*', x)]
-        for _ in s:
-            if _ == 4938:
-                s.remove(_)
-
-
-        first_numlist = [s[x] for x in range (0, len(s)//2)]
-        s_ready = s[len(s)//2 :]
-
+        timer_dic = json.loads(x[0:x.find("}") + 1].replace("\'", "\""))
+        name_dic = json.loads(x[x.find("["):x.find("]") + 1].replace("\'", "\""))
+        limit_dic = json.loads(x[x.find("]") + 1:-1].replace("\'", "\"") + "}")
 
         sending_massive = []
-        for _ in range (0, len(s_ready)):
+        for _ in timer_dic:
 
-            if first_numlist[_] < s_ready[_]:
-                first_numlist[_] += 1
-
-
-
-            elif first_numlist[_] >= s_ready[_]:
-                first_numlist[_] -= first_numlist[_]
-                sending_massive.append(list_of_names1[_])
+            if timer_dic[_] < limit_dic[_]:
+                timer_dic[_] += 1
 
 
-        rewrite_count = {}
-        for _ in range (0, len(list_of_names1)):
-            rewrite_count[list_of_names1[_]] = first_numlist[_]
+            elif timer_dic[_] >= limit_dic[_]:
+                timer_dic[_] -= limit_dic[_]
+                sending_massive.append(_)
 
-        str_beg = 0
-        for _ in range (0, len(x)):
-            if x[_] == '[':
-                str_beg = _
+        print(sending_massive)
 
-        rewrite = str(rewrite_count) + x[str_beg:]
-
+        rewrite = str(timer_dic) + str(name_dic) + str(limit_dic)
         w = open(reminder_txt_dir + '/{}'.format(i), 'w')
         w.write(rewrite)
         w.close()
@@ -251,7 +220,6 @@ def rewriting_data_timer_func():
 
         list_of_users.append(str(id_user))
         list_of_people.append(sending_massive)
-
 
 
     return list_of_users, list_of_people
