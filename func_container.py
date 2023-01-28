@@ -16,7 +16,6 @@ from vk_api.longpoll import VkLongPoll
 import vk_api
 import copy
 import string
-import re
 import os
 import pymysql
 
@@ -193,7 +192,7 @@ def rewriting_data_timer_func():
         r = open(reminder_txt_dir + '/{}'.format(i), 'r')
         x = r.read()
         r.close()
-        timer_dic = json.loads(x[0:x.find("}") + 1].replace("\'", "\""))
+        timer_dic = json.loads(x[0:x.find("}") + 1].replace("\'", "\"")) #тут текстовая версия словаря переводится в словарную
         name_dic = json.loads(x[x.find("["):x.find("]") + 1].replace("\'", "\""))
         limit_dic = json.loads(x[x.find("]") + 1:-1].replace("\'", "\"") + "}")
 
@@ -231,7 +230,7 @@ vk_session = vk_api.VkApi(token=vk_token)
 session_api = vk_session.get_api()
 longpool = VkLongPoll(vk_session)
 
-def sending_message_func(id, text): #
+def sending_message_func(id, text): 
     vk_session.method("messages.send", {"user_id":id, "message":text, "random_id": 0})
 
 def cheking_sending_timer_func(): #при запуске увеличивает числа в текстовом документе на 1, или обнуляет, если они достигли
