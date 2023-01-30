@@ -233,22 +233,26 @@ longpool = VkLongPoll(vk_session)
 def sending_message_func(id, text): 
     vk_session.method("messages.send", {"user_id":id, "message":text, "random_id": 0})
 
-def cheking_sending_timer_func(): #при запуске увеличивает числа в текстовом документе на 1, или обнуляет, если они достигли
-    # опр. значений
+def cheking_sending_timer_func(): #отправляет напоминания
     users_to_be_sent_list, sending_people_list = rewriting_data_timer_func()
     print('id list:', users_to_be_sent_list, 'sending list:', sending_people_list)
 
-    sd = ''
+    sd = 'Не забудь написать человеку '
     try:
         if len(sending_people_list) > 0:
             for _ in sending_people_list:
                 if len(_) == 0:
                     continue
+                elif len(_) > 1:
+                    sd = 'Не забудь написать людям '
                 id = users_to_be_sent_list[sending_people_list.index(_)]
                 print('slindex:', sending_people_list.index(_))
                 for _1 in _:
-                    print('_::::')
-                    sd = sd + '\n' + "Не забудь написать человеку [{}]!".format(_1)
+                    print('_::::') #печатает такой символ за каждого напечатанного человека
+                    sd += "[{}], ".format(_1)
+                sd_list = list(sd)
+                sd_list[-2] = '!'
+                sd = ''.join(sd_list)
                 sending_message_func(id, sd)
                 sd = ''
     except vk_api.exceptions.ApiError:
