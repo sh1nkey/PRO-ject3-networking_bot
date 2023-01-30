@@ -18,7 +18,7 @@ session_api = vk_session.get_api()
 longpool = VkLongPoll(vk_session)
 
 
-def sending_message_func(id, text): #
+def sending_message_func(id, text):
     vk_session.method("messages.send", {"user_id":id, "message":text, "random_id": 0})
 
 
@@ -55,7 +55,7 @@ while 1:
                         for _ in range(0, len(full)):
                             n = list(show_table(msg)[_].values())
                             print(n)
-                            sd = sd + '\n'+"["+str(n[0])+']'+" "+"["+str(n[1])+']'+" "+"["+str(n[2])+']'+" "+"["+str(n[3])+']'+ \
+                            sd += '\n'+"["+str(n[0])+']'+" "+"["+str(n[1])+']'+" "+"["+str(n[2])+']'+" "+"["+str(n[3])+']'+ \
                                 " "+"["+str(n[4])+']'+" "+"["+str(n[5])+']'+" "+"["+str(n[6])+']'+'\n'
                         sending_message_func(id, sd)
 
