@@ -125,13 +125,11 @@ while 1:
                             reminder_term = int(str(msg[-2] + '' + msg[-1]))
                         print('dannie:', table_name, name_surname, date, place, occupation, hobby, reminder_term)
                         create_people(table_name, name_surname, date, place, occupation, hobby, reminder_term)
+
                         sending_message_func(id, "Готово! ")
-                    '''
-                    функция
-                    на
-                    доработке
-                    '''
-                    # if msg[0] == 'у':
+
+
+                    # elif msg[0] == 'у':
                     #     tname = msg[8:16]
                     #     if msg[-2] == ' ':
                     #         del_name = int(msg[-1])
@@ -141,6 +139,12 @@ while 1:
                     #     print(del_name)
                     #     delete_people(tname, del_name)
                     #     sending_message_func(id, "человек удален ")
+                    '''
+                    функция
+                    на
+                    доработке
+                    '''
+
     except:
         pass
 
