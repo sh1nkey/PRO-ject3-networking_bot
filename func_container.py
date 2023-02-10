@@ -32,7 +32,8 @@ try:
         user=user,
         password=password,
         database=db_name,
-        cursorclass=pymysql.cursors.DictCursor
+        cursorclass=pymysql.cursors.DictCursor,
+
     )
     print("successfully connected...")
     print("#" * 20)
@@ -207,7 +208,7 @@ def rewriting_data_timer_func():
                 timer_dic[_] -= limit_dic[_]
                 sending_massive.append(_)
 
-        print(sending_massive)
+
 
         rewrite = str(timer_dic) + str(name_dic) + str(limit_dic)
         w = open(reminder_txt_dir + '/{}'.format(i), 'w')
@@ -235,26 +236,26 @@ def sending_message_func(id, text):
 
 def cheking_sending_timer_func(): #отправляет напоминания
     users_to_be_sent_list, sending_people_list = rewriting_data_timer_func()
-    print('id list:', users_to_be_sent_list, 'sending list:', sending_people_list)
 
-    sd = 'Не забудь написать человеку '
+
     try:
         if len(sending_people_list) > 0:
             for _ in sending_people_list:
-                if len(_) == 0:
+                sd = 'Не забудь написать человеку '
+                control_str_variable = 27
+                if len(_) == 0: #эта строка скипает пустой списо
                     continue
                 elif len(_) > 1:
                     sd = 'Не забудь написать людям '
+                    control_str_variable = 25
                 id = users_to_be_sent_list[sending_people_list.index(_)]
-                print('slindex:', sending_people_list.index(_))
                 for _1 in _:
-                    print('_::::') #печатает такой символ за каждого напечатанного человека
                     sd += "[{}], ".format(_1)
                 sd_list = list(sd)
                 sd_list[-2] = '!'
                 sd = ''.join(sd_list)
                 sending_message_func(id, sd)
-                sd = ''
+                print('человеку: ', id, '\n отправлены: ', sd[control_str_variable : -1] )
     except vk_api.exceptions.ApiError:
         pass
 
@@ -269,20 +270,21 @@ if __name__ == "__main__":
 # def delete_people(tname, del_name):
 #     try:
 #         with connection.cursor() as cursor:
-#             del_name_int = int(del_name)
-#             t = [tname, str(del_name_int), tname, tname, tname, ]
-#
-#
-#             cursor.execute('DELETE FROM project3.symbol=? WHERE id = symbol=?; ALTER TABLE project3.symbol=? DROP id; ' \
-#                       'ALTER TABLE project3.symbol=? ADD id int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST; ' \
-#                       'ALTER TABLE project3.symbol=? AUTO_INCREMENT = 1; set @n=0; update t1 set id=(@n:=@n+1);', [t])
+#             s =f'DELETE FROM project3.{tname} WHERE id = {del_name}; ALTER TABLE project3.{tname} DROP id; ' \
+#                            f'ALTER TABLE project3.{tname} ADD id int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST; ' \
+#                            f'ALTER TABLE project3.{tname} AUTO_INCREMENT = 1; set @n=0; update t1 set id=(@n:=@n+1);'
+#             s = filter(None, s.split(';'))
+#             for i in s:
+#                 # strip() removes leading and trailing white spaces
+#                 # semicolon is re-added per line for query run
+#                 cur.execute(i.strip() + ';')
 #             connection.commit()
 #             print('dltd sucsefuly')
-
-
-    # except Exception as ex:
-    #     print("Connection refused...")
-    #     print(ex)
+#
+#
+#     except Exception as ex:
+#         print("Connection refused...")
+#         print(ex)
 
 
 
