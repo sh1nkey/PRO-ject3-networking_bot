@@ -7,11 +7,13 @@
 # -----------------------------------------------------------
 
 
-import vk_api,  pathlib, os
+import os
+import pathlib
+import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
-from func_container import create_people, change_data_table, show_table, create_table, create_timers, create_dft, Reminder
-from config import vk_token, reminder_txt_dir
 
+from config import vk_token, reminder_txt_dir
+from func_container import create_people, change_data_table, show_table, create_table, create_timers, create_dft, Reminder
 
 vk_session = vk_api.VkApi(token=vk_token)
 session_api = vk_session.get_api()
@@ -19,15 +21,12 @@ longpool = VkLongPoll(vk_session)
 
 
 def sending_message_func(id, text):
-    vk_session.method("messages.send", {"user_id":id, "message":text, "random_id": 0})
-
+    vk_session.method("messages.send", {"user_id": id, "message": text, "random_id": 0})
 
 
 change_list = []
 tne = ''
 running = 0
-
-
 
 while 1:
     try:
@@ -37,15 +36,24 @@ while 1:
                     msg = event.text.lower()
                     id = event.user_id
                     if msg == "привет":
-                        sending_message_func(id, "Давай сразу к делу. Инструкция:\n (Команды писать без квадратных скобочек)\n\n-создать "
-                                              "таблицу, "
-                                              "в которой будут размещаться данные:\n[!создатьтаблицу]\n\n"
-                                              "-чтобы посмотреть содержание таблицы, надо ввести ее название, которое состоит из 8-ми символов: [idsmHkPk]\n\n-чтобы добавить человека, надо написать эту команду, например: [создать ddldfdls Иван_Иванович 2000-01-13 Село_Иваново корововед увлекается_аниме 14] \
-        \nИз ограничений разве что строгое расположение пробелов: их ставить только между категориями. Внутри категории использовать  \
-        нижнее подчеркивание (_). Вот кстати категории: [номер имя_фамилия дата_рождения город специальность увлечения срок напоминания]\n\n-Чтобы задать ячейку, в которой вам нужно что-то изменить, пишем: [изменить название_таблицы категория порядковый_номер_человека].' \
-        'Например:[изменить qwerTyui Имя 2]\n\nЧтобы поменять данные в этой ячейке пишем: [на то_на_что_меняем]. Например: [на Андрей]' \
-        '\n\n-чтобы заставить программу напоминать вам о том, чтобы время от времени писать определенным людям, то пишем: [отсчет "
-                                              "название_таблички]. Например: [отсчет qwertyUi]\nНе беспокойтесь, если вы обновите свою таблицу, то и список тоже обновится :) ")
+                        sending_message_func(id,
+                                             "Давай сразу к делу. Инструкция:\n (Команды писать без квадратных скобочек)\n\n-создать "
+                                             "таблицу, "
+                                             "в которой будут размещаться данные:\n[!создатьтаблицу]\n\n"
+                                             "-чтобы посмотреть содержание таблицы, надо ввести ее название, которое состоит из "
+                                             "8-ми символов: [idsmHkPk]\n\n-чтобы добавить человека, надо написать эту команду, "
+                                             "например: [создать ddldfdls Иван_Иванович 2000-01-13 Село_Иваново корововед "
+                                             "увлекается_аниме 14] \ \nИз ограничений разве что строгое расположение пробелов: "
+                                             "их ставить только между категориями. Внутри категории использовать  \ нижнее "
+                                             "подчеркивание (_). Вот кстати категории: [номер имя_фамилия дата_рождения город "
+                                             "специальность увлечения срок напоминания]\n\n-Чтобы задать ячейку, в которой вам "
+                                             "нужно что-то изменить, пишем: [изменить название_таблицы категория "
+                                             "порядковый_номер_человека].' \ 'Например:[изменить qwerTyui Имя 2]\n\nЧтобы "
+                                             "поменять данные в этой ячейке пишем: [на то_на_что_меняем]. Например: [на "
+                                             "Андрей]' \ '\n\n-чтобы заставить программу напоминать вам о том, чтобы время от "
+                                             "времени писать определенным людям, то пишем: [отсчет "
+                                             "название_таблички]. Например: [отсчет qwertyUi]\nНе беспокойтесь, если вы "
+                                             "обновите свою таблицу, то и список тоже обновится :) ")
                     elif msg == "!создатьтаблицу":
                         sending_message_func(id, "таблица готова!\n ее имя:" + create_table())
                     elif len(msg) == 8:
@@ -55,8 +63,9 @@ while 1:
                         for _ in range(0, len(full)):
                             n = list(show_table(msg)[_].values())
                             print(n)
-                            sd += '\n'+"["+str(n[0])+']'+" "+"["+str(n[1])+']'+" "+"["+str(n[2])+']'+" "+"["+str(n[3])+']'+ \
-                                " "+"["+str(n[4])+']'+" "+"["+str(n[5])+']'+" "+"["+str(n[6])+']'+'\n'
+                            sd += '\n' + "[" + str(n[0]) + ']' + " " + "[" + str(n[1]) + ']' + " " + "[" + str(
+                                n[2]) + ']' + " " + "[" + str(n[3]) + ']' + \
+                                  " " + "[" + str(n[4]) + ']' + " " + "[" + str(n[5]) + ']' + " " + "[" + str(n[6]) + ']' + '\n'
                         sending_message_func(id, sd)
 
 
@@ -86,9 +95,8 @@ while 1:
                         if os.path.exists(checking_path):
                             running = 1
 
-
-
-                    elif msg[0] == 'о' or running == 1: # создать и запустить отсчет, отсчет обновиться автоматом, если таблицу изменить
+                    elif msg[0] == 'о' or running == 1:  # создать и запустить отсчет, отсчет обновиться автоматом, если таблицу
+                        # изменить
                         tname = msg[7:]
                         if running == 1:
                             tname = tne
@@ -102,9 +110,7 @@ while 1:
                         elif running == 1:
                             running = 0
 
-
-
-                    elif msg[0] == 'с': # с - создать, добавляет человека в таблицу
+                    elif msg[0] == 'с':  # с - создать, добавляет человека в таблицу
                         space_list = []
                         d = -1
                         for i in msg:
@@ -113,7 +119,7 @@ while 1:
                                 space_list.append(d)
                             if len(space_list) == 7:
                                 break
-                        table_name  = msg[space_list[0]:space_list[1]]
+                        table_name = msg[space_list[0]:space_list[1]]
                         name_surname = msg[space_list[1]:space_list[2]]
                         date = msg[space_list[2]:space_list[3]]
                         place = msg[space_list[3]:space_list[4]]
@@ -127,7 +133,6 @@ while 1:
                         create_people(table_name, name_surname, date, place, occupation, hobby, reminder_term)
 
                         sending_message_func(id, "Готово! ")
-
 
                     # elif msg[0] == 'у':
                     #     tname = msg[8:16]
@@ -147,11 +152,3 @@ while 1:
 
     except:
         pass
-
-
-
-
-
-
-
-

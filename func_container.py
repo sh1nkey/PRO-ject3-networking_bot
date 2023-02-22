@@ -19,6 +19,7 @@ import string
 import os
 import pymysql
 
+
 def random_x_digit_number_generate(length):
     letters = string.ascii_letters
     rand_name = ''.join(random.choice(letters) for i in range(length))
@@ -47,7 +48,7 @@ def create_people(table_name, ima, data, gorod, prof, uvl, srok):
     try:
         with connection.cursor() as cursor:
             create_ppl = 'INSERT INTO project3.%s (Имя, Дата_рождения, Город, Специализация, Увлечения, Срок_напоминания) ' \
-                        "VALUES ('%s', '%s', '%s', '%s', '%s', %s);"
+                         "VALUES ('%s', '%s', '%s', '%s', '%s', %s);"
 
             cursor.execute(create_ppl % (table_name, ima, data, gorod, prof, uvl, srok,))
             connection.commit()
@@ -57,7 +58,6 @@ def create_people(table_name, ima, data, gorod, prof, uvl, srok):
     except Exception as ex:
         print("Connection refused...")
         print(ex)
-
 
 
 def change_data_table(table_name, what_change, idshnik, to_what):
@@ -100,7 +100,7 @@ def show_table(msg):
         print(ex)
 
 
-def create_table(): #функция для создания таблицы
+def create_table():  # функция для создания таблицы
     try:
         with connection.cursor() as cursor:
 
@@ -119,7 +119,7 @@ def create_table(): #функция для создания таблицы
         print(ex)
 
 
-def create_timers(imya_name, name_term): #манипуляция со словарями для дальнейшей работы с ними
+def create_timers(imya_name, name_term):  # манипуляция со словарями для дальнейшей работы с ними
     nuzn_perm = copy.deepcopy(name_term)
     for _ in range(0, len(imya_name)):
         nam = imya_name[_]['Имя']
@@ -128,8 +128,7 @@ def create_timers(imya_name, name_term): #манипуляция со слова
     return [nuzn_perm, name_term, imya_name]
 
 
-
-def create_dft(tablename): # манипуляция со словарями
+def create_dft(tablename):  # манипуляция со словарями
     try:
         with connection.cursor() as cursor:
             create_listtable = "SELECT Имя FROM project3.%s "
@@ -137,10 +136,9 @@ def create_dft(tablename): # манипуляция со словарями
             my_result1 = cursor.fetchall()
 
             f = {}
-            for _ in range(0, len(my_result1)): #создается словарь с именами людей и нулями для произведение отсчета
+            for _ in range(0, len(my_result1)):  # создается словарь с именами людей и нулями для произведение отсчета
                 l = my_result1[_]['Имя']
                 f[l] = 0
-
 
             vals = "SELECT Срок_напоминания FROM project3.%s "
             cursor.execute(vals % tablename)
@@ -156,12 +154,10 @@ def create_dft(tablename): # манипуляция со словарями
         print("Connection refused...")
         print(ex)
 
+
 def generate_name_for_timer_txt(self):
     name_new = 'Napominalka-{}'.format(self)
     return name_new
-
-
-
 
 
 class Reminder():
@@ -171,18 +167,14 @@ class Reminder():
         self.imya_srok = name_term
         self.imya_name = imya_name
 
-
-
     def append_totxt(self):
         c_name = generate_name_for_timer_txt(self.vk_id)
 
-        pas = pathlib.Path(reminder_txt_dir +'/{}.txt'.format(c_name))
+        pas = pathlib.Path(reminder_txt_dir + '/{}.txt'.format(c_name))
 
         w = open(pas, 'w')
         w.write(str(self.nuzn_list) + str(self.imya_name) + str(self.imya_srok))
         w.close()
-
-
 
 
 def rewriting_data_timer_func():
@@ -193,7 +185,7 @@ def rewriting_data_timer_func():
         r = open(reminder_txt_dir + '/{}'.format(i), 'r')
         x = r.read()
         r.close()
-        timer_dic = json.loads(x[0:x.find("}") + 1].replace("\'", "\"")) #тут текстовая версия словаря переводится в словарную
+        timer_dic = json.loads(x[0:x.find("}") + 1].replace("\'", "\""))  # тут текстовая версия словаря переводится в словарную
         name_dic = json.loads(x[x.find("["):x.find("]") + 1].replace("\'", "\""))
         limit_dic = json.loads(x[x.find("]") + 1:-1].replace("\'", "\"") + "}")
 
@@ -203,12 +195,9 @@ def rewriting_data_timer_func():
             if timer_dic[_] < limit_dic[_]:
                 timer_dic[_] += 1
 
-
             elif timer_dic[_] >= limit_dic[_]:
                 timer_dic[_] -= limit_dic[_]
                 sending_massive.append(_)
-
-
 
         rewrite = str(timer_dic) + str(name_dic) + str(limit_dic)
         w = open(reminder_txt_dir + '/{}'.format(i), 'w')
@@ -217,33 +206,30 @@ def rewriting_data_timer_func():
 
         id_user = i[12:21]
 
-
         list_of_users.append(str(id_user))
         list_of_people.append(sending_massive)
 
-
     return list_of_users, list_of_people
-
-
 
 
 vk_session = vk_api.VkApi(token=vk_token)
 session_api = vk_session.get_api()
 longpool = VkLongPoll(vk_session)
 
-def sending_message_func(id, text): 
-    vk_session.method("messages.send", {"user_id":id, "message":text, "random_id": 0})
 
-def cheking_sending_timer_func(): #отправляет напоминания
+def sending_message_func(id, text):
+    vk_session.method("messages.send", {"user_id": id, "message": text, "random_id": 0})
+
+
+def cheking_sending_timer_func():  # отправляет напоминания
     users_to_be_sent_list, sending_people_list = rewriting_data_timer_func()
-
 
     try:
         if len(sending_people_list) > 0:
             for _ in sending_people_list:
                 sd = 'Не забудь написать человеку '
                 control_str_variable = 27
-                if len(_) == 0: #эта строка скипает пустой списо
+                if len(_) == 0:  # эта строка скипает пустой списо
                     continue
                 elif len(_) > 1:
                     sd = 'Не забудь написать людям '
@@ -255,14 +241,13 @@ def cheking_sending_timer_func(): #отправляет напоминания
                 sd_list[-2] = '!'
                 sd = ''.join(sd_list)
                 sending_message_func(id, sd)
-                print('человеку: ', id, '\n отправлены: ', sd[control_str_variable : -1] )
+                print('человеку: ', id, '\n отправлены: ', sd[control_str_variable: -1])
     except vk_api.exceptions.ApiError:
         pass
 
+
 if __name__ == "__main__":
     cheking_sending_timer_func()
-
-
 
 '''
 функция удаления пользователей из таблицы будет доступна в будущих обновлениях
@@ -285,11 +270,3 @@ if __name__ == "__main__":
 #     except Exception as ex:
 #         print("Connection refused...")
 #         print(ex)
-
-
-
-
-
-
-
-
