@@ -156,8 +156,7 @@ def create_dft(tablename):  # манипуляция со словарями
 
 
 def generate_name_for_timer_txt(self):
-    name_new = 'Napominalka-{}'.format(self)
-    return name_new
+    return f'Napominalka-{self}'
 
 
 class Reminder():
@@ -185,7 +184,8 @@ def rewriting_data_timer_func():
         r = open(reminder_txt_dir + '/{}'.format(i), 'r')
         x = r.read()
         r.close()
-        timer_dic = json.loads(x[0:x.find("}") + 1].replace("\'", "\""))  # тут текстовая версия словаря переводится в словарную
+        timer_dic = json.loads(
+            x[0:x.find("}") + 1].replace("\'", "\""))  # тут текстовая версия словаря переводится в словарную
         name_dic = json.loads(x[x.find("["):x.find("]") + 1].replace("\'", "\""))
         limit_dic = json.loads(x[x.find("]") + 1:-1].replace("\'", "\"") + "}")
 
