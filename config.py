@@ -9,7 +9,7 @@
 
 
 
-host =''#это все данные для базы данных MySQL
+host =''#это все данные для базы данных MySQL, потом прикручу SQLite
 user = ''
 password = ''
 db_name = ''
