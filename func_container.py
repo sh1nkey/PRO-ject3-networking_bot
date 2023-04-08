@@ -9,7 +9,6 @@
 
 import pathlib
 import json
-from pymysql import cursors
 from config import user, host, password, db_name, reminder_txt_dir, vk_token
 import random
 from vk_api.longpoll import VkLongPoll
@@ -170,7 +169,7 @@ class Reminder():
         c_name = generate_name_for_timer_txt(self.vk_id)
 
         pas = pathlib.Path(reminder_txt_dir + '/{}.txt'.format(c_name))
-
+        print(self.nuzn_list, '\n' , self.imya_srok, '\n' ,  self.imya_name)
         w = open(pas, 'w')
         w.write(str(self.nuzn_list) + str(self.imya_name) + str(self.imya_srok))
         w.close()
@@ -180,36 +179,40 @@ def rewriting_data_timer_func():
     list_papok = os.listdir(reminder_txt_dir)
     list_of_users = []
     list_of_people = []
-    for i in list_papok:
-        r = open(reminder_txt_dir + '/{}'.format(i), 'r')
-        x = r.read()
-        r.close()
-        timer_dic = json.loads(
-            x[0:x.find("}") + 1].replace("\'", "\""))  # тут текстовая версия словаря переводится в словарную
-        name_dic = json.loads(x[x.find("["):x.find("]") + 1].replace("\'", "\""))
-        limit_dic = json.loads(x[x.find("]") + 1:-1].replace("\'", "\"") + "}")
+    for i in list_papok :
+        if i.endswith('.txt'):
+            print(i)
+            r = open(reminder_txt_dir + '/{}'.format(i), 'r')
+            x = r.read()
+            r.close()
+            timer_dic = json.loads(
+                x[0:x.find("}") + 1].replace("\'", "\""))  # тут текстовая версия словаря переводится в словарную
+            name_dic = json.loads(x[x.find("["):x.find("]") + 1].replace("\'", "\""))
+            limit_dic = json.loads(x[x.find("]") + 1:-1].replace("\'", "\"") + "}")
 
-        sending_massive = []
-        for _ in timer_dic:
+            sending_massive = []
+            for _ in timer_dic:
 
-            if timer_dic[_] < limit_dic[_]:
-                timer_dic[_] += 1
+                if timer_dic[_] < limit_dic[_]:
+                    timer_dic[_] += 1
 
-            elif timer_dic[_] >= limit_dic[_]:
-                timer_dic[_] -= limit_dic[_]
-                sending_massive.append(_)
+                elif timer_dic[_] >= limit_dic[_]:
+                    timer_dic[_] -= limit_dic[_]
+                    sending_massive.append(_)
 
-        rewrite = str(timer_dic) + str(name_dic) + str(limit_dic)
-        w = open(reminder_txt_dir + '/{}'.format(i), 'w')
-        w.write(rewrite)
-        w.close()
+            rewrite = str(timer_dic) + str(name_dic) + str(limit_dic)
+            w = open(reminder_txt_dir + '/{}'.format(i), 'w')
+            w.write(rewrite)
+            w.close()
 
-        id_user = i[12:21]
+            id_user = i[12:21]
 
-        list_of_users.append(str(id_user))
-        list_of_people.append(sending_massive)
+            list_of_users.append(str(id_user))
+            list_of_people.append(sending_massive)
+            return list_of_users, list_of_people
+        elif i.endswith('.xlsx'):
+            pass # updates data
 
-    return list_of_users, list_of_people
 
 
 vk_session = vk_api.VkApi(token=vk_token)

@@ -1,4 +1,5 @@
-config.py
-__pychache__/
+__pychache__
 .idea
-
+.env
+venv
+config.py
